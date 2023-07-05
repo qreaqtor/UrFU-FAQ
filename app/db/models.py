@@ -4,6 +4,10 @@ from typing import List
 from bson import ObjectId
 from pydantic import BaseModel, Field
 
+from beanie import Document
+from fastapi_users.db import BeanieBaseUser
+from pymongo.collation import Collation
+
 class Question(BaseModel):
     user_id: str
     title: str
@@ -16,3 +20,14 @@ class Answer(BaseModel):
     question_id: str
     text_content: str
     date_created: datetime = Field(default_factory=datetime.utcnow)
+
+class User(BeanieBaseUser, Document):
+    email: str
+    hashed_password: str
+    is_active: bool = True
+    is_superuser: bool = False
+    is_verified: bool = False
+
+    class Settings:
+        name = "users"
+        email_collation = Collation("en", strength=2)

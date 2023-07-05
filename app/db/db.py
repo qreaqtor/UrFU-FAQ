@@ -1,13 +1,17 @@
-from pymongo import MongoClient
+import motor.motor_asyncio
 from app.db.models import Question, Answer
 from bson import ObjectId
+from fastapi_users.db import BeanieUserDatabase
 
-
+from app.db.models import User
 from app.core.config import DB_LINK, DB
 
-client = MongoClient(DB_LINK)
+client = motor.motor_asyncio.AsyncIOMotorClient(
+    DB_LINK, uuidRepresentation="standard"
+)
 db = client[DB]
 
+users = db['users']
 questions = db['questions']
 answers = db['answers']
 
@@ -29,3 +33,6 @@ def get_answer_by_id(answer_id: str) -> Answer:
 
 def get_answers_by_question_id(question_id: str):
     return answers.find({"question_id": question_id})
+
+async def get_user_db():
+    yield BeanieUserDatabase(User)
