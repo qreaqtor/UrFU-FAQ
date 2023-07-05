@@ -22,6 +22,8 @@ class Answer(BaseModel):
     date_created: datetime = Field(default_factory=datetime.utcnow)
 
 class User(BeanieBaseUser, Document):
+    name: str
+    surname: str
     email: str
     hashed_password: str
     is_active: bool = True
