@@ -7,3 +7,5 @@ DB_LINK = f'mongodb+srv://{_mongo_user}:{_mongo_password}@cluster0.ojeeimb.mongo
 DB = os.environ['DB']
 
 SECRET = "SECRET"
+
+AI_TOKEN = os.environ["AI_TOKEN"]

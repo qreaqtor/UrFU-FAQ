@@ -4,6 +4,7 @@ from app.core.security.auth import auth_backend, fastapi_users, current_active_u
 from app.core.security.schemas import *
 from app.db.models import User
 
+from app.api.moderate import get_moderate
 
 app = FastAPI()
 
@@ -79,3 +80,7 @@ async def get_all_answers_by_question_id(question_id: str):
     async for answer in answers:
         result.append(Answer(**answer))
     return result
+
+@app.get("/moderate/{text}")
+async def get_moderate_of_answer_or_question(text: str):
+    return get_moderate(text)
