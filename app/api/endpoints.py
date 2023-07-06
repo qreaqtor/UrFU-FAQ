@@ -2,9 +2,13 @@ from fastapi import FastAPI, Depends
 from beanie import init_beanie
 from app.core.security.auth import auth_backend, fastapi_users, current_active_user
 from app.core.security.schemas import *
-from app.db.models import User
 
 from app.api.moderate import get_moderate
+
+###------- ДЛЯ РАБОТЫ С БАЗОЙ ДАННЫХ -------###
+from app.db.models import *
+from app.db.db import *
+
 
 app = FastAPI()
 
@@ -33,11 +37,6 @@ app.include_router(
 )
 
 
-@app.get("/authenticated-route")
-async def authenticated_route(user: User = Depends(current_active_user)):
-    return {"message": f"Hello {user.email}!"}
-
-
 @app.on_event("startup")
 async def on_startup():
     await init_beanie(
@@ -47,10 +46,6 @@ async def on_startup():
         ],
     )
 
-
-###------- ДЛЯ РАБОТЫ С БАЗОЙ ДАННЫХ -------###
-from app.db.models import *
-from app.db.db import *
 
 ### Создаёт новый вопрос
 @app.post("/new_question")

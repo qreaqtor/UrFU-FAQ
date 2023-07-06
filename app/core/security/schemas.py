@@ -29,4 +29,3 @@ class UserUpdate(schemas.BaseUserUpdate):
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False
-    
