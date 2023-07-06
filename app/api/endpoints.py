@@ -71,11 +71,11 @@ async def create_answer(answer: Answer):
 async def get_answer(answer_id: str):
     return await get_answer_by_id(answer_id)
 
-### Возвращает список всех id ответов, которые являются ответом на вопрос question_id
+### Возвращает список всех ответов, которые являются ответом на вопрос question_id
 @app.get("/all_answers/{question_id}")
-async def get_answers_ids_by_question_id(question_id: str) -> List[str]:
+async def get_all_answers_by_question_id(question_id: str):
     answers = await get_answers_by_question_id(question_id)
-    ids = []
+    result = []
     async for answer in answers:
-        ids.append(str(answer["_id"]))
-    return ids
+        result.append(Answer(**answer))
+    return result
