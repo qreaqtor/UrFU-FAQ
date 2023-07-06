@@ -14,12 +14,14 @@ class Question(BaseModel):
     text_content: str
     date_created: datetime = Field(default_factory=datetime.utcnow)
     tags: List[str] = []
+    was_checked: bool = False
 
 class Answer(BaseModel):
     user_id: str
     question_id: str
     text_content: str
     date_created: datetime = Field(default_factory=datetime.utcnow)
+    was_checked: bool = False
 
 class User(BeanieBaseUser, Document):
     name: str
