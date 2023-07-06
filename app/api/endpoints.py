@@ -83,4 +83,5 @@ async def get_all_answers_by_question_id(question_id: str):
 
 @app.get("/moderate/{text}")
 async def get_moderate_of_answer_or_question(text: str):
-    return get_moderate(text)
+    result = get_moderate(text)
+    return result
