@@ -3,7 +3,7 @@ from beanie import init_beanie
 from app.core.security.auth import auth_backend, fastapi_users, current_active_user
 from app.core.security.schemas import *
 
-from app.api.moderate import get_moderate
+from app.api.moderate import get_moderate_question, get_moderate_answer
 
 ###------- ДЛЯ РАБОТЫ С БАЗОЙ ДАННЫХ -------###
 from app.db.models import *
@@ -76,7 +76,10 @@ async def get_all_answers_by_question_id(question_id: str):
         result.append(Answer(**answer))
     return result
 
-@app.get("/moderate/{text}")
-async def get_moderate_of_answer_or_question(text: str):
-    result = get_moderate(text)
-    return result
+@app.get("/moderate/question/{question}")
+async def get_moderate_of_question(question: str):
+    return get_moderate_question(question)
+
+@app.get("/moderate/answer/{question}/{answer}")
+async def get_moderate_of_answer(question: str, answer: str):
+    return get_moderate_answer(answer, question)
