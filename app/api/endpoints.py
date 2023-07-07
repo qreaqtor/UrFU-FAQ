@@ -57,6 +57,14 @@ async def create_question(question: Question):
 async def get_question(question_id: str):
     return await get_question_by_id(question_id)
 
+@app.get("/all_questions/")
+async def get_all_questions():
+    questions = await get_questions()
+    result = []
+    async for question in questions:
+        result.append(Question(**question))
+    return result
+
 ### Создаёт новый ответ
 @app.post("/new_answer")
 async def create_answer(answer: Answer):

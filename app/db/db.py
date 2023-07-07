@@ -23,6 +23,9 @@ async def get_question_by_id(question_id: str) -> Question:
     question_dict = await questions.find_one({"_id": ObjectId(question_id)})
     return Question(**question_dict)
 
+async def get_questions():
+    return questions.find()
+
 async def insert_answer(answer: Answer):
     answer_dict = answer.dict()
     await answers.insert_one(answer_dict)
