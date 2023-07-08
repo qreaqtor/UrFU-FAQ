@@ -7,7 +7,7 @@ def ask_chatgpt(prompt):
     response = openai.Completion.create(
         engine='text-davinci-003',  # Выбираем модель движка, например, 'text-davinci-003'
         prompt=prompt,
-        max_tokens=20,  # Максимальное количество токенов в ответе
+        max_tokens=50,  # Максимальное количество токенов в ответе
         temperature=0.2,  # Контролирует степень случайности ответа (0.0 - детерминированный, 1.0 - случайный)
         n=1,  # Количество вариантов ответа, которые нужно сгенерировать
         stop=None,  # Опциональное условие остановки генерации ответа
@@ -47,5 +47,14 @@ def get_moderate_answer(answer, question):
 Ответ должен быть в формате строки, содержащей только оценки, разделенные запятыми за каждый пункт, и не содержать ничего кроме этого.'''
     prompt = moderate
     response = ask_chatgpt(prompt)
-    print(moderate)
     return [x == '1' for x in response.split(',')]
+
+def get_moderate_topic(topics, question):
+    moderate = f'''Выбери к какой теме отнести вопрос: {question}
+Темы: {topics}
+Если нет подходящей по смыслу темы, напиши свою.
+Ответ должен содержать только название темы без знаков препинания.'''
+    prompt = moderate
+    response = ask_chatgpt(prompt)
+    print(moderate)
+    return response

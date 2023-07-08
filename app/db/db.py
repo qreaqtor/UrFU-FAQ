@@ -1,5 +1,6 @@
+from beanie import PydanticObjectId
 import motor.motor_asyncio
-from app.db.models import Question, QuestionOut, Answer, AnswerOut
+from app.db.models import Question, QuestionOut, Answer, AnswerOut, Topic, TopicOut
 from bson import ObjectId
 from fastapi_users.db import BeanieUserDatabase
 from typing import List
@@ -14,6 +15,7 @@ db = client[DB]
 users = db['users']
 questions = db['questions']
 answers = db['answers']
+topics = db['topics']
 
 async def insert_question(question: Question):
     question_dict = question.dict()
@@ -23,9 +25,9 @@ async def get_question_by_id(question_id: str) -> QuestionOut:
     question_dict = await questions.find_one({"_id": ObjectId(question_id)})
     return QuestionOut(**question_dict, id=question_dict['_id'])
 
-async def get_questions() -> List[QuestionOut]:
+async def get_questions(topic_id: str) -> List[QuestionOut]:
     result = []
-    async for question in questions.find():
+    async for question in questions.find({"topic_id": ObjectId(topic_id)}):
         result.append(QuestionOut(**question, id=question['_id']))
     return result
 
@@ -43,6 +45,21 @@ async def get_answers_by_question_id(question_id: str) -> List[AnswerOut]:
         result.append(AnswerOut(**answer, id=answer['_id']))
         print(answer)
     return result
+
+async def get_topics() -> List[TopicOut]:
+    result = []
+    async for topic in topics.find():
+        result.append(TopicOut(**topic, id=topic['_id']))
+    return result
+
+async def get_question_topic_id(topic: Topic) -> PydanticObjectId:
+    result = await topics.find_one_and_update(
+        {'title': topic.title},
+        {'$setOnInsert': topic.dict()},
+        upsert=True,
+        return_document=True
+    )
+    return result['_id']
 
 async def get_user_db():
     yield BeanieUserDatabase(User)
