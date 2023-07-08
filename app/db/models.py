@@ -15,17 +15,15 @@ class QuestionIn(BaseModel):
 class QuestionOut(BaseModel):
     id: PydanticObjectId
     user_id: PydanticObjectId
-    title: str = ""
+    topic_id: PydanticObjectId
     content: str
     date_created: datetime
-    tags: List[str] = []
 
 class Question(BaseModel):
     user_id: PydanticObjectId
-    title: str = ""
+    topic_id: PydanticObjectId
     content: str
     date_created: datetime
-    tags: List[str] = []
 
 
 class AnswerIn(BaseModel):
@@ -36,6 +34,7 @@ class AnswerIn(BaseModel):
 class AnswerOut(BaseModel):
     id: PydanticObjectId
     user_id: PydanticObjectId
+    question_id: PydanticObjectId
     text_content: str
     date_created: datetime
 
@@ -44,6 +43,14 @@ class Answer(BaseModel):
     question_id: PydanticObjectId
     text_content: str
     date_created: datetime
+
+
+class TopicOut(BaseModel):
+    id: PydanticObjectId
+    title: str
+
+class Topic(BaseModel):
+    title: str
 
 
 class User(BeanieBaseUser, Document):
