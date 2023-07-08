@@ -19,7 +19,7 @@ def ask_chatgpt(prompt):
     return ""
 
 
-def question_scores_to_response(scores):
+def question_scores_to_moderate_response(scores):
     criteria = [
         'Текст не подходит по тематике сайта или не связан с ответами об адаптации и обучении первокурсников.',
         'Текст не соответствует правилам или политике сайта.',
@@ -45,11 +45,10 @@ def get_moderate_question(question):
 Ответ должен быть в формате строки, содержащей только оценки, разделенные запятыми за каждый пункт, и не содержать ничего кроме этого.'''
     prompt = moderate
     response = ask_chatgpt(prompt)
-    print(response)
-    return question_scores_to_response(response.split(','))
+    return question_scores_to_moderate_response(response.split(','))
 
 
-def answer_scores_to_response(scores):
+def answer_scores_to_moderate_response(scores):
     criteria = [
         'Текст не подходит по тематике сайта или не связан с ответами об адаптации и обучении первокурсников.',
         'Текст не соответствует правилам или политике сайта.',
@@ -75,7 +74,7 @@ def get_moderate_answer(answer, question):
 Ответ должен быть в формате строки, содержащей только оценки, разделенные запятыми за каждый пункт, и не содержать ничего кроме этого.'''
     prompt = moderate
     response = ask_chatgpt(prompt)
-    return answer_scores_to_response(response.split(','))
+    return answer_scores_to_moderate_response(response.split(','))
 
 
 def get_moderate_topic(topics, question):

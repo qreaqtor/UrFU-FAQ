@@ -56,7 +56,7 @@ async def create_question(question: QuestionIn, user = Depends(current_active_us
     topic = Topic(title=topic_title)
     topic_id = await get_question_topic_id(topic)
     result = Question(**question.dict(), user_id=user.id, topic_id=topic_id)
-    await insert_question(result)
+    return await insert_question(result)
 
 ### Возвращает один вопрос
 @app.get("/questions/{question_id}", response_model=QuestionOut)
