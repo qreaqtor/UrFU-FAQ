@@ -88,10 +88,12 @@ async def get_all_answers_by_question_id(question_id: str):
 async def get_all_topics():
     return await get_topics()
 
+### Возвращает список из 1 и 0, где 1 с индексом i - соответствие критерию i
 @app.get("/moderate/question/{question}")
 async def get_moderate_of_question(question: str):
     return get_moderate_question(question)
 
+### Возвращает список из 1 и 0, где 1 с индексом i - соответствие критерию i
 @app.get("/moderate/answer/{question}/{answer}")
 async def get_moderate_of_answer(question: str, answer: str):
     return get_moderate_answer(answer, question)
