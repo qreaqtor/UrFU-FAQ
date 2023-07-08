@@ -47,7 +47,6 @@ def get_moderate_answer(answer, question):
 Ответ должен быть в формате строки, содержащей только оценки, разделенные запятыми за каждый пункт, и не содержать ничего кроме этого.'''
     prompt = moderate
     response = ask_chatgpt(prompt)
-    print(moderate)
     return [x == '1' for x in response.split(',')]
 
 def get_moderate_topic(topics, question):
@@ -55,7 +54,7 @@ def get_moderate_topic(topics, question):
 Темы: {topics}
 Если нет подходящей по смыслу темы, напиши свою.
 Ответ должен содержать только название темы без знаков препинания.'''
-    print(moderate)
     prompt = moderate
     response = ask_chatgpt(prompt)
+    print(moderate)
     return response

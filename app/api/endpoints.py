@@ -51,7 +51,7 @@ async def on_startup():
 ### Создаёт новый вопрос
 @app.post("/new_question")
 async def create_question(question: QuestionIn, user = Depends(current_active_user)):
-    topics = await get_topics()
+    topics = [x.title for x in await get_topics()]
     topic_title = get_moderate_topic(topics, question.content)
     topic = Topic(title=topic_title)
     topic_id = await get_question_topic_id(topic)
