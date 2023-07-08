@@ -18,6 +18,20 @@ def ask_chatgpt(prompt):
         return response.choices[0].text.strip()
     return ""
 
+
+def question_scores_to_response(scores):
+    criteria = [
+        'Текст не подходит по тематике сайта или не связан с ответами об адаптации и обучении первокурсников.',
+        'Текст не соответствует правилам или политике сайта.',
+        'Текст содержит нецензурную лексику или оскорбления.',
+        'Текст не является информативным или релевантным.',
+        'Ответ на этот вопрос не сможет заинтересовать первокурсника.']
+    result = []
+    for i in range(len(scores)):
+        if scores[i] == '0':
+            result.append(criteria[i])
+    return result
+
 def get_moderate_question(question):
     moderate = f'''Тематика сайта: поступление в вуз и обучение первокурсников.
 Текст: '{question}'
@@ -31,8 +45,22 @@ def get_moderate_question(question):
 Ответ должен быть в формате строки, содержащей только оценки, разделенные запятыми за каждый пункт, и не содержать ничего кроме этого.'''
     prompt = moderate
     response = ask_chatgpt(prompt)
-    return [x == '1' for x in response.split(',')]
+    print(response)
+    return question_scores_to_response(response.split(','))
 
+
+def answer_scores_to_response(scores):
+    criteria = [
+        'Текст не подходит по тематике сайта или не связан с ответами об адаптации и обучении первокурсников.',
+        'Текст не соответствует правилам или политике сайта.',
+        'Текст содержит нецензурную лексику или оскорбления.',
+        'Текст не является информативным или релевантным.',
+        'Ответ не удовлетворяет вопросу.']
+    result = []
+    for i in range(len(scores)):
+        if scores[i] == '0':
+            result.append(criteria[i])
+    return result
 
 def get_moderate_answer(answer, question):
     moderate = f'''Тематика сайта: поступление в вуз и обучение первокурсников.
@@ -47,7 +75,8 @@ def get_moderate_answer(answer, question):
 Ответ должен быть в формате строки, содержащей только оценки, разделенные запятыми за каждый пункт, и не содержать ничего кроме этого.'''
     prompt = moderate
     response = ask_chatgpt(prompt)
-    return [x == '1' for x in response.split(',')]
+    return answer_scores_to_response(response.split(','))
+
 
 def get_moderate_topic(topics, question):
     moderate = f'''Выбери к какой теме отнести вопрос: {question}
@@ -56,5 +85,4 @@ def get_moderate_topic(topics, question):
 Ответ должен содержать только название темы без знаков препинания.'''
     prompt = moderate
     response = ask_chatgpt(prompt)
-    print(moderate)
     return response
