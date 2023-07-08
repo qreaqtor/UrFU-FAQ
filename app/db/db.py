@@ -17,9 +17,10 @@ questions = db['questions']
 answers = db['answers']
 topics = db['topics']
 
-async def insert_question(question: Question):
+async def insert_question(question: Question) -> QuestionOut:
     question_dict = question.dict()
     await questions.insert_one(question_dict)
+    return QuestionOut(**question_dict, id=question_dict['_id'])
 
 async def get_question_by_id(question_id: str) -> QuestionOut:
     question_dict = await questions.find_one({"_id": ObjectId(question_id)})
@@ -31,9 +32,10 @@ async def get_questions(topic_id: str) -> List[QuestionOut]:
         result.append(QuestionOut(**question, id=question['_id']))
     return result
 
-async def insert_answer(answer: Answer):
+async def insert_answer(answer: Answer) -> AnswerOut:
     answer_dict = answer.dict()
     await answers.insert_one(answer_dict)
+    return AnswerOut(**answer_dict, id=answer_dict['_id'])
 
 async def get_answer_by_id(answer_id: str) -> AnswerOut:
     answer_dict = await answers.find_one({"_id": ObjectId(answer_id)})
@@ -43,7 +45,6 @@ async def get_answers_by_question_id(question_id: str) -> List[AnswerOut]:
     result = []
     async for answer in answers.find({"question_id": ObjectId(question_id)}):
         result.append(AnswerOut(**answer, id=answer['_id']))
-        print(answer)
     return result
 
 async def get_topics() -> List[TopicOut]:

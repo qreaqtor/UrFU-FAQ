@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends
 from beanie import init_beanie
-from typing import List
+from typing import List, Union
 from app.core.security.auth import auth_backend, fastapi_users, current_active_user
 from app.core.security.schemas import *
 
@@ -48,9 +48,12 @@ async def on_startup():
     )
 
 
-### Создаёт новый вопрос
-@app.post("/new_question")
+### Создаёт новый вопрос, если он прошел модерацию, иначе возвращает список не удовлетворяющих критериев
+@app.post("/new_question", response_model= Union[QuestionOut, List[str]])
 async def create_question(question: QuestionIn, user = Depends(current_active_user)):
+    moderate_response = get_moderate_question(question.content)
+    if moderate_response:
+        return moderate_response
     topics = [x.title for x in await get_topics()]
     topic_title = get_moderate_topic(topics, question.content)
     topic = Topic(title=topic_title)
@@ -58,25 +61,29 @@ async def create_question(question: QuestionIn, user = Depends(current_active_us
     result = Question(**question.dict(), user_id=user.id, topic_id=topic_id)
     return await insert_question(result)
 
-### Возвращает один вопрос
-@app.get("/questions/{question_id}", response_model=QuestionOut)
-async def get_question(question_id: str):
-    return await get_question_by_id(question_id)
+### Создаёт новый ответ, если он прошел модерацию, иначе возвращает список не удовлетворяющих критериев
+@app.post("/new_answer")
+async def create_answer(answer: AnswerIn, user = Depends(current_active_user)):
+    question = await get_question_by_id(answer.question_id)
+    moderate_response = get_moderate_answer(answer.text_content, question.content)
+    if moderate_response:
+        return moderate_response
+    return await insert_answer(Answer(**answer.dict(), user_id=user.id))
+
+# ### Возвращает один вопрос
+# @app.get("/questions/{question_id}", response_model=QuestionOut)
+# async def get_question(question_id: str):
+#     return await get_question_by_id(question_id)
 
 ### Возвращает список всех вопросов
 @app.get("/all_questions/{topic}", response_model=List[QuestionOut])
-async def get_all_questions(topic: str):
+async def get_all_questions_by_topic(topic: str):
     return await get_questions(topic_id=topic)
 
-### Создаёт новый ответ
-@app.post("/new_answer")
-async def create_answer(answer: AnswerIn, user = Depends(current_active_user)):
-    await insert_answer(Answer(**answer.dict(), user_id=user.id))
-
-### Возвращает один ответ
-@app.get("/answers/{answer_id}", response_model=AnswerOut)
-async def get_answer(answer_id: str):
-    return await get_answer_by_id(answer_id)
+# ### Возвращает один ответ
+# @app.get("/answers/{answer_id}", response_model=AnswerOut)
+# async def get_answer(answer_id: str):
+#     return await get_answer_by_id(answer_id)
 
 ### Возвращает список всех ответов, которые являются ответом на вопрос question_id
 @app.get("/all_answers/{question_id}", response_model=List[AnswerOut])
@@ -88,16 +95,16 @@ async def get_all_answers_by_question_id(question_id: str):
 async def get_all_topics():
     return await get_topics()
 
-### Возвращает список из 1 и 0, где 1 с индексом i - соответствие критерию i
-@app.get("/moderate/question/{question}")
-async def get_moderate_of_question(question: str):
-    return get_moderate_question(question)
+# ### Возвращает список из 1 и 0, где 1 с индексом i - соответствие критерию i
+# @app.get("/moderate/question/{question}")
+# async def get_moderate_of_question(question: str):
+#     return get_moderate_question(question)
 
-### Возвращает список из 1 и 0, где 1 с индексом i - соответствие критерию i
-@app.get("/moderate/answer/{question}/{answer}")
-async def get_moderate_of_answer(question: str, answer: str):
-    return get_moderate_answer(answer, question)
+# ### Возвращает список из 1 и 0, где 1 с индексом i - соответствие критерию i
+# @app.get("/moderate/answer/{question}/{answer}")
+# async def get_moderate_of_answer(question: str, answer: str):
+#     return get_moderate_answer(answer, question)
 
-@app.get("/moderate/topics/{topics}/{question}")
-async def get_topic_by_question(topics: str, question: str):
-    return get_moderate_topic(topics.split(','), question)
+# @app.get("/moderate/topics/{topics}/{question}")
+# async def get_topic_by_question(topics: str, question: str):
+#     return get_moderate_topic(topics.split(','), question)
