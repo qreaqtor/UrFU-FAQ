@@ -32,9 +32,18 @@ async def get_questions(topic_id: str) -> List[QuestionOut]:
         result.append(QuestionOut(**question, id=question['_id']))
     return result
 
+async def get_questions_without_answer() -> List[QuestionOut]:
+    result = []
+    async for question in questions.find({"has_answer": False}):
+        result.append(QuestionOut(**question, id=question['_id']))
+    return result
+
 async def insert_answer(answer: Answer) -> AnswerOut:
     answer_dict = answer.dict()
     await answers.insert_one(answer_dict)
+    questions.update_one(
+        {"_id": ObjectId(answer_dict['question_id'])},
+        {"$set": {"has_answer": True}})
     return AnswerOut(**answer_dict, id=answer_dict['_id'])
 
 async def get_answer_by_id(answer_id: str) -> AnswerOut:
@@ -53,14 +62,14 @@ async def get_topics() -> List[TopicOut]:
         result.append(TopicOut(**topic, id=topic['_id']))
     return result
 
-async def get_question_topic_id(topic: Topic) -> PydanticObjectId:
-    result = await topics.find_one_and_update(
+async def get_topic(topic: Topic) -> TopicOut:
+    topic_dict = await topics.find_one_and_update(
         {'title': topic.title},
         {'$setOnInsert': topic.dict()},
         upsert=True,
         return_document=True
     )
-    return result['_id']
+    return TopicOut(**topic_dict, id=topic_dict['_id'])
 
 async def get_user_db():
     yield BeanieUserDatabase(User)

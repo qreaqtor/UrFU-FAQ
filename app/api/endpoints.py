@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends
 from beanie import init_beanie
-from typing import List, Optional, Union
+from typing import List, Union
 from app.core.security.auth import auth_backend, fastapi_users, current_active_user
 from app.core.security.schemas import *
 
@@ -56,9 +56,8 @@ async def create_question(question: QuestionIn, user = Depends(current_active_us
         return moderate_response
     topics = [x.title for x in await get_topics()]
     topic_title = get_moderate_topic(topics, question.question)
-    topic = Topic(title=topic_title)
-    topic_id = await get_question_topic_id(topic)
-    result = Question(**question.dict(), user_id=user.id, topic_id=topic_id)
+    topic = await get_topic(Topic(title=topic_title))
+    result = Question(**question.dict(), user_id=user.id, topic_id=topic.id)
     return await insert_question(result)
 
 ### Создаёт новый ответ, если он прошел модерацию, иначе возвращает список не удовлетворяющих критериев
@@ -68,9 +67,11 @@ async def create_answer(answer: AnswerIn, user = Depends(current_active_user)):
     moderate_response = get_moderate_answer(answer.answer, question.question)
     if moderate_response:
         return moderate_response
-    return await insert_answer(Answer(**answer.dict(), user_id=user.id))
+    result = Answer(**answer.dict(), user_id=user.id)
+    return await insert_answer(result)
 
-@app.post("/new_question_answer/", response_model= Optional[List[str]])
+### Создаёт новый вопрос и  ответ, если они прошли модерацию, иначе возвращает список не удовлетворяющих критериев
+@app.post("/new_question_answer/", response_model= Union[QuestionAndAnswerOut, List[str]])
 async def create_question_and_answer(q_and_a: QuestionAndAnswerIn, user = Depends(current_active_user)):
     question_response = get_moderate_question(q_and_a.question)
     answer_response = get_moderate_answer(q_and_a.answer, q_and_a.question)
@@ -78,21 +79,25 @@ async def create_question_and_answer(q_and_a: QuestionAndAnswerIn, user = Depend
         return question_response + answer_response
     topics = [x.title for x in await get_topics()]
     topic_title = get_moderate_topic(topics, q_and_a.question)
-    topic = Topic(title=topic_title)
-    topic_id = await get_question_topic_id(topic)
-    result = Question(**q_and_a.dict(), user_id=user.id, topic_id=topic_id)
-    question = await insert_question(result)
-    await insert_answer(Answer(**q_and_a.dict(), user_id=user.id, question_id=question.id))
+    topic = await get_topic(Topic(title=topic_title))
+    question = await insert_question(Question(**q_and_a.dict(), user_id=user.id, topic_id=topic.id))
+    answer = await insert_answer(Answer(**q_and_a.dict(), user_id=user.id, question_id=question.id))
+    return QuestionAndAnswerOut(**answer.dict(), answer_id=answer.id, question=question.question)
 
 # ### Возвращает один вопрос
 # @app.get("/questions/{question_id}", response_model=QuestionOut)
 # async def get_question(question_id: str):
 #     return await get_question_by_id(question_id)
 
-### Возвращает список всех вопросов
-@app.get("/all_questions/{topic}", response_model=List[QuestionOut])
-async def get_all_questions_by_topic(topic: str):
-    return await get_questions(topic_id=topic)
+### Возвращает список всех вопросов в теме topic_id
+@app.get("/questions_by_topic/{topic_id}", response_model=List[QuestionOut])
+async def get_all_questions_by_topic(topic_id: str):
+    return await get_questions(topic_id)
+
+### Возвращает список всех вопросов, которые не имеют ответа
+@app.get("/questions_without_answer/", response_model=List[QuestionOut])
+async def get_all_questions_without_answer():
+    return await get_questions_without_answer()
 
 # ### Возвращает один ответ
 # @app.get("/answers/{answer_id}", response_model=AnswerOut)

@@ -23,6 +23,7 @@ class Question(BaseModel):
     user_id: PydanticObjectId
     topic_id: PydanticObjectId
     question: str
+    has_answer: bool = False
     date_created: datetime = Field(default_factory=datetime.utcnow)
 
 
@@ -48,6 +49,14 @@ class Answer(BaseModel):
 class QuestionAndAnswerIn(BaseModel):
     question: str
     answer: str
+
+class QuestionAndAnswerOut(BaseModel):
+    question_id: PydanticObjectId
+    answer_id: PydanticObjectId
+    user_id: PydanticObjectId
+    question: str
+    answer: str
+    date_created: datetime
 
 
 class TopicOut(BaseModel):
