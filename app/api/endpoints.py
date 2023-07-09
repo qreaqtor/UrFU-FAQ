@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends
 from beanie import init_beanie
-from typing import List, Union
+from typing import List, Optional, Union
 from app.core.security.auth import auth_backend, fastapi_users, current_active_user
 from app.core.security.schemas import *
 
@@ -51,24 +51,38 @@ async def on_startup():
 ### Создаёт новый вопрос, если он прошел модерацию, иначе возвращает список не удовлетворяющих критериев
 @app.post("/new_question", response_model= Union[QuestionOut, List[str]])
 async def create_question(question: QuestionIn, user = Depends(current_active_user)):
-    moderate_response = get_moderate_question(question.content)
+    moderate_response = get_moderate_question(question.question)
     if moderate_response:
         return moderate_response
     topics = [x.title for x in await get_topics()]
-    topic_title = get_moderate_topic(topics, question.content)
+    topic_title = get_moderate_topic(topics, question.question)
     topic = Topic(title=topic_title)
     topic_id = await get_question_topic_id(topic)
     result = Question(**question.dict(), user_id=user.id, topic_id=topic_id)
     return await insert_question(result)
 
 ### Создаёт новый ответ, если он прошел модерацию, иначе возвращает список не удовлетворяющих критериев
-@app.post("/new_answer")
+@app.post("/new_answer", response_model= Union[AnswerOut, List[str]])
 async def create_answer(answer: AnswerIn, user = Depends(current_active_user)):
     question = await get_question_by_id(answer.question_id)
-    moderate_response = get_moderate_answer(answer.text_content, question.content)
+    moderate_response = get_moderate_answer(answer.answer, question.question)
     if moderate_response:
         return moderate_response
     return await insert_answer(Answer(**answer.dict(), user_id=user.id))
+
+@app.post("/new_question_answer/", response_model= Optional[List[str]])
+async def create_question_and_answer(q_and_a: QuestionAndAnswerIn, user = Depends(current_active_user)):
+    question_response = get_moderate_question(q_and_a.question)
+    answer_response = get_moderate_answer(q_and_a.answer, q_and_a.question)
+    if question_response or answer_response:
+        return question_response + answer_response
+    topics = [x.title for x in await get_topics()]
+    topic_title = get_moderate_topic(topics, q_and_a.question)
+    topic = Topic(title=topic_title)
+    topic_id = await get_question_topic_id(topic)
+    result = Question(**q_and_a.dict(), user_id=user.id, topic_id=topic_id)
+    question = await insert_question(result)
+    await insert_answer(Answer(**q_and_a.dict(), user_id=user.id, question_id=question.id))
 
 # ### Возвращает один вопрос
 # @app.get("/questions/{question_id}", response_model=QuestionOut)

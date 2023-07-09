@@ -9,40 +9,45 @@ from pymongo.collation import Collation
 
 
 class QuestionIn(BaseModel):
-    content: str
-    date_created: datetime = Field(default_factory=datetime.utcnow)
+    question: str
+    # date_created: datetime = Field(default_factory=datetime.utcnow)
 
 class QuestionOut(BaseModel):
     id: PydanticObjectId
     user_id: PydanticObjectId
     topic_id: PydanticObjectId
-    content: str
+    question: str
     date_created: datetime
 
 class Question(BaseModel):
     user_id: PydanticObjectId
     topic_id: PydanticObjectId
-    content: str
-    date_created: datetime
+    question: str
+    date_created: datetime = Field(default_factory=datetime.utcnow)
 
 
 class AnswerIn(BaseModel):
     question_id: PydanticObjectId
-    text_content: str
-    date_created: datetime = Field(default_factory=datetime.utcnow)
+    answer: str
+    # date_created: datetime = Field(default_factory=datetime.utcnow)
 
 class AnswerOut(BaseModel):
     id: PydanticObjectId
     user_id: PydanticObjectId
     question_id: PydanticObjectId
-    text_content: str
+    answer: str
     date_created: datetime
 
 class Answer(BaseModel):
     user_id: PydanticObjectId
     question_id: PydanticObjectId
-    text_content: str
-    date_created: datetime
+    answer: str
+    date_created: datetime = Field(default_factory=datetime.utcnow)
+
+
+class QuestionAndAnswerIn(BaseModel):
+    question: str
+    answer: str
 
 
 class TopicOut(BaseModel):
