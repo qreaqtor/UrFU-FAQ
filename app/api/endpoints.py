@@ -117,8 +117,8 @@ async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/profile", response_class=HTMLResponse)
-async def root(request: Request):
-    return templates.TemplateResponse("profile.html", {"request": request})
+async def root(request: Request, user: User = Depends(current_active_user)):
+    return templates.TemplateResponse("profile.html", {"request": request, "user": user})
 
 @app.get("/write", response_class=HTMLResponse)
 async def root(request: Request):

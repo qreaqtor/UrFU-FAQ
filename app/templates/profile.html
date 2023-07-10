@@ -30,54 +30,61 @@
     <main class="main">
       <div class="wrapper">
         <div class="main__continer">
+            {% if user %}
+                <div>
+                    <p>Вы уже авторизованы как: {{ user.email }}</p>
+                    <form id="logout-form" action="/auth/jwt/logout" method="POST">
+                        <button type="submit">Выйти</button>
+                    </form>
+                </div>
+            {% else %}
+                <!-- регистрация -->
+                <div class="main__sign-up sign-up">
+                <div class="sign-up__title">Регистрация</div>
+                <div class="sign-up__first-name sign-up__input-block">
+                    <p class="sign-up__first-name-text sign-up__text">Имя</p>
+                    <input class="sign-up__first-name-input sign-up__input" type="text" name="sign-up__first-name-input" placeholder="введите ваше имя...">
+                </div>
+                <div class="sign-up__second-name sign-up__input-block">
+                    <p class="sign-up__second-name-text sign-up__text">Фамилия</p>
+                    <input class="sign-up__second-name-input sign-up__input" type="text" name="sign-up__second-name-input" placeholder="введите вашу фамилию...">
+                </div>
+                <div class="sign-up__email sign-up__input-block">
+                    <p class="sign-up__email-text sign-up__text">Электронная почта</p>
+                    <input class="sign-up__email-input sign-up__input" type="email" name="sign-up__email-input" placeholder="введите вашу почту...">
+                </div>
+                <div class="sign-up__password sign-up__input-block">
+                    <p class="sign-up__password-text sign-up__text">Пароль</p>
+                    <input class="sign-up__password-input sign-up__input" type="password" name="sign-up__password-input" placeholder="введите пароль...">
+                    <input class="sign-up__password-input sign-up__password-input_confirmation sign-up__input" type="password" name="sign-up__password-input_confirmation" placeholder="подтвердите пароль...">
+                </div>
 
-        <!-- регистрация -->
-        <div class="main__sign-up sign-up">
-          <div class="sign-up__title">Регистрация</div>
-          <div class="sign-up__first-name sign-up__input-block">
-            <p class="sign-up__first-name-text sign-up__text">Имя</p>
-            <input class="sign-up__first-name-input sign-up__input" type="text" name="sign-up__first-name-input" placeholder="введите ваше имя...">
-          </div>
-          <div class="sign-up__second-name sign-up__input-block">
-            <p class="sign-up__second-name-text sign-up__text">Фамилия</p>
-            <input class="sign-up__second-name-input sign-up__input" type="text" name="sign-up__second-name-input" placeholder="введите вашу фамилию...">
-          </div>
-          <div class="sign-up__email sign-up__input-block">
-            <p class="sign-up__email-text sign-up__text">Электронная почта</p>
-            <input class="sign-up__email-input sign-up__input" type="email" name="sign-up__email-input" placeholder="введите вашу почту...">
-          </div>
-          <div class="sign-up__password sign-up__input-block">
-            <p class="sign-up__password-text sign-up__text">Пароль</p>
-            <input class="sign-up__password-input sign-up__input" type="password" name="sign-up__password-input" placeholder="введите пароль...">
-            <input class="sign-up__password-input sign-up__password-input_confirmation sign-up__input" type="password" name="sign-up__password-input_confirmation" placeholder="подтвердите пароль...">
-          </div>
+                <button class="sign-up__button" type="submit" name="sign-up__button">Создать аккаунт</button>
+                <div class="sign-up__hint">
+                    <div class="sign-up__hint-text">уже есть аккаунт?</div>
+                    <div class="sign-up__hint-link"><a href="#">нажми сюда</a></div>
+                </div>
+                </div>
+                
+                <!-- вход -->
+                <div class="main__login login">
+                <div class="login__title">Вход</div>
+                <div class="login__email login__input-block">
+                    <p class="login__email-text login__text">Электронная почта</p>
+                    <input class="login__email-input login__input" type="email" name="login__email-input" placeholder="введите вашу почту...">
+                </div>
+                <div class="login__password login__input-block">
+                    <p class="login__password-text login__text">Пароль</p>
+                    <input class="login__password-input login__input" type="password" name="login__password-input" placeholder="введите пароль...">
+                </div>
 
-          <button class="sign-up__button" type="submit" name="sign-up__button">Создать аккаунт</button>
-          <div class="sign-up__hint">
-            <div class="sign-up__hint-text">уже есть аккаунт?</div>
-            <div class="sign-up__hint-link"><a href="#">нажми сюда</a></div>
-          </div>
-        </div>
-        
-        <!-- вход -->
-        <div class="main__login login">
-          <div class="login__title">Вход</div>
-          <div class="login__email login__input-block">
-            <p class="login__email-text login__text">Электронная почта</p>
-            <input class="login__email-input login__input" type="email" name="login__email-input" placeholder="введите вашу почту...">
-          </div>
-          <div class="login__password login__input-block">
-            <p class="login__password-text login__text">Пароль</p>
-            <input class="login__password-input login__input" type="password" name="login__password-input" placeholder="введите пароль...">
-          </div>
-
-          <button class="login__button" type="submit" name="login__button">Войти</button>
-          <div class="login__hint">
-            <div class="login__hint-text">нет аккаунта?</div>
-            <div class="login__hint-link"><a href="#">нажми сюда</a></div>
-          </div>
-        </div>
-
+                <button class="login__button" type="submit" name="login__button">Войти</button>
+                <div class="login__hint">
+                    <div class="login__hint-text">нет аккаунта?</div>
+                    <div class="login__hint-link"><a href="#">нажми сюда</a></div>
+                </div>
+                </div>
+            {% endif %}
       </div>
     </main>
   </body>
