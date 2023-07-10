@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Request
 from beanie import init_beanie
 from typing import List, Union
 
@@ -12,6 +12,9 @@ from app.api.moderate import get_moderate_question, get_moderate_answer, get_mod
 from app.db.models import *
 from app.db.db import *
 
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+templates = Jinja2Templates(directory="app/templates")
 
 app = FastAPI()
 
@@ -138,3 +141,7 @@ async def get_all_topics():
 # @app.get("/moderate/topics/{topics}/{question}")
 # async def get_topic_by_question(topics: str, question: str):
 #     return get_moderate_topic(topics.split(','), question)
+
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
