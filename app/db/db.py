@@ -70,5 +70,19 @@ async def get_topic(topic: Topic) -> TopicOut:
     )
     return TopicOut(**topic_dict, id=topic_dict['_id'])
 
+async def get_search_result(text: str):
+    questions_result = []
+    async for question in questions.find({ "question": { "$search": text } }):
+        questions_result.append(QuestionOut(**question, id=question['_id']))
+
+    answers_result = []
+    async for answer in answers.find({ "$text": { "$search": text } }):
+        answers_result.append(AnswerOut(**answer, id=answer['_id']))
+
+    return {
+        "questions": questions_result,
+        "answers": answers_result
+    }
+
 async def get_user_db():
     yield BeanieUserDatabase(User)

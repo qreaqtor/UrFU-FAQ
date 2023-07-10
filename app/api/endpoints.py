@@ -108,6 +108,10 @@ async def get_all_answers_by_question_id(question_id: str):
 async def get_all_topics():
     return await get_topics()
 
+@app.get('/search/{text}')
+async def get_search(text: str):
+    return await get_search_result(text)
+
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
