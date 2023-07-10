@@ -1,4 +1,3 @@
-from beanie import PydanticObjectId
 import motor.motor_asyncio
 from app.db.models import Question, QuestionOut, Answer, AnswerOut, Topic, TopicOut
 from bson import ObjectId

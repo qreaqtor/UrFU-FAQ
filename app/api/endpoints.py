@@ -27,16 +27,6 @@ app.include_router(
     tags=["auth"],
 )
 app.include_router(
-    fastapi_users.get_reset_password_router(),
-    prefix="/auth",
-    tags=["auth"],
-)
-app.include_router(
-    fastapi_users.get_verify_router(UserRead),
-    prefix="/auth",
-    tags=["auth"],
-)
-app.include_router(
     fastapi_users.get_users_router(UserRead, UserUpdate),
     prefix="/users",
     tags=["users"],
@@ -98,11 +88,6 @@ async def create_question_and_answer(q_and_a: QuestionAndAnswerIn, user = Depend
     answer = await insert_answer(Answer(**q_and_a.dict(), user_id=user.id, question_id=question.id))
     return QuestionAndAnswerOut(**answer.dict(), answer_id=answer.id, question=question.question)
 
-# ### Возвращает один вопрос
-# @app.get("/questions/{question_id}", response_model=QuestionOut)
-# async def get_question(question_id: str):
-#     return await get_question_by_id(question_id)
-
 ### Возвращает список всех вопросов в теме topic_id
 @app.get("/questions_by_topic/{topic_id}", response_model=List[QuestionOut])
 async def get_all_questions_by_topic(topic_id: str):
@@ -113,11 +98,6 @@ async def get_all_questions_by_topic(topic_id: str):
 async def get_all_questions_without_answer():
     return await get_questions_without_answer()
 
-# ### Возвращает один ответ
-# @app.get("/answers/{answer_id}", response_model=AnswerOut)
-# async def get_answer(answer_id: str):
-#     return await get_answer_by_id(answer_id)
-
 ### Возвращает список всех ответов, которые являются ответом на вопрос question_id
 @app.get("/all_answers/{question_id}", response_model=List[AnswerOut])
 async def get_all_answers_by_question_id(question_id: str):
@@ -127,20 +107,6 @@ async def get_all_answers_by_question_id(question_id: str):
 @app.get("/all_topics/", response_model=List[TopicOut])
 async def get_all_topics():
     return await get_topics()
-
-# ### Возвращает список из 1 и 0, где 1 с индексом i - соответствие критерию i
-# @app.get("/moderate/question/{question}")
-# async def get_moderate_of_question(question: str):
-#     return get_moderate_question(question)
-
-# ### Возвращает список из 1 и 0, где 1 с индексом i - соответствие критерию i
-# @app.get("/moderate/answer/{question}/{answer}")
-# async def get_moderate_of_answer(question: str, answer: str):
-#     return get_moderate_answer(answer, question)
-
-# @app.get("/moderate/topics/{topics}/{question}")
-# async def get_topic_by_question(topics: str, question: str):
-#     return get_moderate_topic(topics.split(','), question)
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
