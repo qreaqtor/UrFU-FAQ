@@ -91,3 +91,92 @@
 
   <script src="js/main.js"></script>
 </html>
+<script>
+    // Находим кнопку "Войти"
+var loginButton = document.querySelector('.login__button');
+
+// Добавляем обработчик события клика на кнопку "Войти"
+loginButton.addEventListener('click', function(event) {
+  event.preventDefault(); // Предотвращаем отправку формы по умолчанию
+
+  // Получаем значения полей ввода
+  var emailInput = document.querySelector('.login__email-input');
+  var passwordInput = document.querySelector('.login__password-input');
+  var email = emailInput.value;
+  var password = passwordInput.value;
+
+  // Создаем объект FormData и добавляем в него значения полей ввода
+  var formData = new FormData();
+  formData.append('username', email);
+  formData.append('password', password);
+
+  // Создаем объект запроса
+  var request = new XMLHttpRequest();
+  request.open('POST', '/auth/jwt/login');
+  request.send(formData);
+
+  // Обработка ответа сервера (вы можете настроить свою логику обработки здесь)
+  request.onload = function() {
+    if (request.status === 204) {
+      // Успешный вход, обновление страницы или перенаправление на другую страницу
+      alert("Успешный вход")
+    } else {
+      // Вход не удался, выполнение дополнительных действий (например, отображение ошибки)
+      alert("Неудачный вход, попробуйте ещё раз")
+    }
+  };
+});
+</script>
+<script>
+    // Находим кнопку "Создать аккаунт"
+var signUpButton = document.querySelector('.sign-up__button');
+
+// Добавляем обработчик события клика на кнопку "Создать аккаунт"
+signUpButton.addEventListener('click', function(event) {
+  event.preventDefault(); // Предотвращаем отправку формы по умолчанию
+
+  // Получаем значения полей ввода
+  var firstNameInput = document.querySelector('.sign-up__first-name-input');
+  var lastNameInput = document.querySelector('.sign-up__second-name-input');
+  var emailInput = document.querySelector('.sign-up__email-input');
+  var passwordInput = document.querySelector('.sign-up__password-input');
+  var confirmPasswordInput = document.querySelector('.sign-up__password-input_confirmation');
+  
+  var firstName = firstNameInput.value;
+  var lastName = lastNameInput.value;
+  var email = emailInput.value;
+  var password = passwordInput.value;
+  var confirmPassword = confirmPasswordInput.value;
+
+  // Создаем объект с данными для отправки
+  var requestData = {
+    email: email,
+    password: password,
+    is_active: true,
+    is_superuser: false,
+    is_verified: false,
+    name: firstName,
+    surname: lastName
+  };
+
+  // Создаем объект запроса
+  var request = new XMLHttpRequest();
+  request.open('POST', '/auth/register');
+  request.setRequestHeader('Content-Type', 'application/json');
+
+  // Отправляем запрос с данными в формате JSON
+  request.send(JSON.stringify(requestData));
+
+  // Обработка ответа сервера
+  request.onload = function() {
+    if (request.status === 201) {
+      // Успешная регистрация, выполнение дополнительных действий (например, перенаправление на страницу успешной регистрации)
+      alert('Успешная регистрация');
+    } else {
+      // Регистрация не удалась, выполнение дополнительных действий (например, отображение ошибки)
+      alert('Ошибка регистрации, попробуйте ещё раз');
+    }
+  };
+});
+
+</script>
