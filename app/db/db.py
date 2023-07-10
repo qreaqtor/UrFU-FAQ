@@ -1,3 +1,4 @@
+import re
 import motor.motor_asyncio
 from app.db.models import Question, QuestionOut, Answer, AnswerOut, Topic, TopicOut
 from bson import ObjectId
@@ -72,17 +73,9 @@ async def get_topic(topic: Topic) -> TopicOut:
 
 async def get_search_result(text: str):
     questions_result = []
-    async for question in questions.find({ "question": { "$search": text } }):
+    async for question in questions.find({"question":{"$regex":re.compile(text, re.IGNORECASE)}}):
         questions_result.append(QuestionOut(**question, id=question['_id']))
-
-    answers_result = []
-    async for answer in answers.find({ "$text": { "$search": text } }):
-        answers_result.append(AnswerOut(**answer, id=answer['_id']))
-
-    return {
-        "questions": questions_result,
-        "answers": answers_result
-    }
+    return questions_result
 
 async def get_user_db():
     yield BeanieUserDatabase(User)

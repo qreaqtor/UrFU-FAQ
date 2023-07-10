@@ -108,7 +108,7 @@ async def get_all_answers_by_question_id(question_id: str):
 async def get_all_topics():
     return await get_topics()
 
-@app.get('/search/{text}')
+@app.get('/search/{text}', response_model=List[QuestionOut])
 async def get_search(text: str):
     return await get_search_result(text)
 
@@ -117,7 +117,7 @@ async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/profile", response_class=HTMLResponse)
-async def root(request: Request, user: User = Depends(current_active_user)):
+async def root(request: Request, user : User = Depends(current_active_user)):
     return templates.TemplateResponse("profile.html", {"request": request, "user": user})
 
 @app.get("/write", response_class=HTMLResponse)
