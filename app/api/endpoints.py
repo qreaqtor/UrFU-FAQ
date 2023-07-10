@@ -142,6 +142,18 @@ async def get_all_topics():
 # async def get_topic_by_question(topics: str, question: str):
 #     return get_moderate_topic(topics.split(','), question)
 
+@app.middleware("http")
+async def modify_response(request, call_next):
+    response = await call_next(request)
+    if response.status_code == 401:
+        if request.url.path == '/profile':
+            response = templates.TemplateResponse("profile.html", {"request": request}, status_code=401)
+        elif request.url.path == '/':
+            response = templates.TemplateResponse("index.html", {"request": request}, status_code=401)
+        elif request.url.path == '/write':
+            response = templates.TemplateResponse("write.html", {"request": request}, status_code=401)
+    return response
+
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
