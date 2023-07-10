@@ -1,6 +1,8 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from beanie import init_beanie
 from typing import List, Union
+
+import openai
 from app.core.security.auth import auth_backend, fastapi_users, current_active_user
 from app.core.security.schemas import *
 
@@ -51,7 +53,10 @@ async def on_startup():
 ### Создаёт новый вопрос, если он прошел модерацию, иначе возвращает список не удовлетворяющих критериев
 @app.post("/new_question", response_model= Union[QuestionOut, List[str]])
 async def create_question(question: QuestionIn, user = Depends(current_active_user)):
-    moderate_response = get_moderate_question(question.question)
+    try:
+        moderate_response = get_moderate_question(question.question)
+    except openai.error.RateLimitError as e:
+        raise HTTPException(status_code=429, detail=str(e))
     if moderate_response:
         return moderate_response
     topics = [x.title for x in await get_topics()]
@@ -64,7 +69,10 @@ async def create_question(question: QuestionIn, user = Depends(current_active_us
 @app.post("/new_answer", response_model= Union[AnswerOut, List[str]])
 async def create_answer(answer: AnswerIn, user = Depends(current_active_user)):
     question = await get_question_by_id(answer.question_id)
-    moderate_response = get_moderate_answer(answer.answer, question.question)
+    try:
+        moderate_response = get_moderate_answer(answer.answer, question.question)
+    except openai.error.RateLimitError as e:
+        raise HTTPException(status_code=429, detail=str(e))
     if moderate_response:
         return moderate_response
     result = Answer(**answer.dict(), user_id=user.id)
@@ -73,8 +81,11 @@ async def create_answer(answer: AnswerIn, user = Depends(current_active_user)):
 ### Создаёт новый вопрос и  ответ, если они прошли модерацию, иначе возвращает список не удовлетворяющих критериев
 @app.post("/new_question_answer/", response_model= Union[QuestionAndAnswerOut, List[str]])
 async def create_question_and_answer(q_and_a: QuestionAndAnswerIn, user = Depends(current_active_user)):
-    question_response = get_moderate_question(q_and_a.question)
-    answer_response = get_moderate_answer(q_and_a.answer, q_and_a.question)
+    try:
+        question_response = get_moderate_question(q_and_a.question)
+        answer_response = get_moderate_answer(q_and_a.answer, q_and_a.question)
+    except openai.error.RateLimitError as e:
+        raise HTTPException(status_code=429, detail=str(e))
     if question_response or answer_response:
         return question_response + answer_response
     topics = [x.title for x in await get_topics()]
