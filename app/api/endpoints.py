@@ -149,3 +149,7 @@ async def root(request: Request):
 @app.get("/profile", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse("profile.html", {"request": request})
+
+@app.get("/write", response_class=HTMLResponse)
+async def root(request: Request):
+    return templates.TemplateResponse("write.html", {"request": request})
