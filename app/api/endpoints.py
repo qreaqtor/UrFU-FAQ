@@ -145,3 +145,7 @@ async def get_all_topics():
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/profile", response_class=HTMLResponse)
+async def root(request: Request):
+    return templates.TemplateResponse("profile.html", {"request": request})
