@@ -6,6 +6,7 @@ import LoginView from '../view/login-view.js';
 import SignUpView from '../view/sign-up-view.js';
 import LoadArticleView from '../view/load-article-view.js';
 import MainContainerView from '../view/main-container-view.js';
+import ProfileView from '../view/profile-view.js';
 import { render } from '../render.js';
 
 
@@ -17,6 +18,7 @@ export default class BoardPresenter {
     this.loadArticle = new LoadArticleView();
     this.login = new LoginView();
     this.signUp = new SignUpView();
+    this.profile = new ProfileView();
     this.mainWrapper = document.querySelector('.main__wrapper');
   }
 
@@ -38,6 +40,7 @@ export default class BoardPresenter {
 
     render(this.articlesList, this.mainContainer.getElement());
     this.loadArticle.init();
+    this.profile.init();
     this.login.init(this.switchToSignUpPage);
     this.signUp.init(this.switchToLoginPage);
   }
@@ -54,7 +57,23 @@ export default class BoardPresenter {
     }
     if (pageNumber == 2) {
       this.mainWrapper.innerHTML = '';
-      render(this.signUp, this.mainWrapper);
+
+      // логика запроса
+      fetch('/users/me')
+        .then(response => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error('Ошибка при выполнении запроса');
+          }
+        })
+        .then(data => {
+          render(this.profile, this.mainWrapper);
+        })
+        .catch(error => {
+          render(this.signUp, this.mainWrapper);
+          console.error(error);
+        });
     }
   }
 
