@@ -116,22 +116,10 @@ async def get_search(text: str):
 async def modify_response(request, call_next):
     response = await call_next(request)
     if response.status_code == 401:
-        if request.url.path == '/profile':
-            response = templates.TemplateResponse("profile.html", {"request": request}, status_code=401)
-        elif request.url.path == '/':
+        if request.url.path == '/':
             response = templates.TemplateResponse("index.html", {"request": request}, status_code=401)
-        elif request.url.path == '/write':
-            response = templates.TemplateResponse("write.html", {"request": request}, status_code=401)
     return response
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
-
-@app.get("/profile", response_class=HTMLResponse)
-async def root(request: Request, user : User = Depends(current_active_user)):
-    return templates.TemplateResponse("profile.html", {"request": request, "user": user})
-
-@app.get("/write", response_class=HTMLResponse)
-async def root(request: Request):
-    return templates.TemplateResponse("write.html", {"request": request})
