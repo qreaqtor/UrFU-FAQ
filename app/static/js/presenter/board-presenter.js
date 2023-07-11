@@ -59,7 +59,7 @@ export default class BoardPresenter {
       this.mainWrapper.innerHTML = '';
 
       // логика запроса
-      if (this.profile.getAuthorizationCode() == 200) {
+      if (this.profile.getAuthorizationCode()) {
         render(this.profile, this.mainWrapper);
       } else {
         render(this.signUp, this.mainWrapper);

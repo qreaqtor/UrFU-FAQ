@@ -43,19 +43,23 @@ export default class ArticleView {
 
   // запрос на проверку авторизации пользователя
   getAuthorizationCode = () => {
-    return 200;
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '/users/me');
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const response = JSON.parse(xhr.responseText);
+          return response;
+        }
+        else return null;
+      };
+      xhr.send();
   }
 
   // получение данных пользователя
   getProfileDate = () => {
-    return {
-      name: "Иван",
-      surname: "Иванов",
-      email: "ivan.ivanov@gmail.com",
-      hashed_password: "123",
-      is_active: true,
-      is_superuser: false,
-      is_verified: false
+    var result = this.getAuthorizationCode()
+    if (result) {
+      return result;
     }
   }
 
