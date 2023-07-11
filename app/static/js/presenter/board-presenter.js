@@ -72,9 +72,9 @@ export default class BoardPresenter {
   switchTheme = (themeId) => {
     return () => {
       this.articlesList.removeArticles();
-      const theme = this.themes[themeId-1]["id"]
-      for (const question of this.themesModel.questions.filter(x => x.topic_id == theme)) {
-        render(new ArticleView(question), this.articlesList.getElement());
+      const theme = this.themes[themeId-1]["id"] // получаем id темы (например: 64aacb66d3a0225df0c46c41)
+      for (const question of this.themesModel.questions.filter(x => x.topic_id == theme)) { // их всех вопросов мы проходимся только по вопросам, имеющие эту тему
+        render(new ArticleView(question), this.articlesList.getElement()); //либо тут, либо где то в процессе создания объекта ArticleView выдаёт оишбку
       }
     }
   }
