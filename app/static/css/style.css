@@ -39,9 +39,14 @@ ul li {list-style: none;}
 img {vertical-align: top;}
 h1,h2,h3,h4,h5,h6 {font-size: inherit;font-weight: 400;}
 
+html { /* убирает сдвиг скрола */
+  width:100vw;
+  overflow-x:hidden;
+}
 body {
   font-family: 'Raleway';
   font-size: 16px;
+  line-height: 20px;
 }
 a {
   color: #000000;
@@ -53,6 +58,7 @@ a:active {
 
 
 
+/* заголовок */
 .header {
   margin-bottom: 30px;
 }
@@ -62,10 +68,12 @@ a:active {
   margin: 0 auto;
 }
 .header__container {
+  padding: 30px 20px;
+  border-bottom: 1px solid #000000; 
+}
+.header__menu {
   display: flex;
   align-items: center;
-  padding: 30px 20px;
-  border-bottom: 1px solid #000000;
 }
 .header__logo {
   width: 120px;
@@ -81,7 +89,7 @@ a:active {
 }
 .header__search input{
   height: 38px;
-  width: 380px;
+  width: 300px;
   border: 1px solid #808080;
   border-radius: 5px;
   padding-left: 40px;
@@ -93,7 +101,7 @@ a:active {
 }
 .header__menu-item {
   width: 90px;
-  margin-right: 30px;
+  margin-right: 10px;
   text-align: center;
 }
 .header__menu-item-link {
@@ -126,6 +134,7 @@ a:active {
 
 
 
+/* главная страница */
 .main {
 }
 .main__continer {
@@ -134,6 +143,9 @@ a:active {
 .hidden {
   display: none;
 }
+
+
+/* темы */
 .main__themes {
   padding: 20px 10px;
   margin-right: 40px;
@@ -175,8 +187,11 @@ a:active {
 }
 
 
+/* статьи */
 .main__articles {
+  width: 100%;
   margin-top: 20px;
+  margin-right: 20px;
 }
 .main__article {
   margin-bottom: 50px;
@@ -214,9 +229,8 @@ a:active {
 
 
 
-.main__login {
-  
-}
+/* регистрация */
+.main__login {}
 .login {
   width: 480px;
   border: 1px solid #000000;
@@ -309,6 +323,7 @@ a:active {
 
 
 
+/* вход */
 .sign-up {
   width: 480px;
   border: 1px solid #000000;
@@ -402,6 +417,7 @@ a:active {
 
 
 
+/* загрузка статьи */
 .main__load-article-container {
   padding: 0 20px;
 }
@@ -439,12 +455,11 @@ a:active {
   font-size: 14px;
 }
 .main__load-article-button {
-  width: 400px;
-  height: 40px;
+  width: 200px;
+  height: 30px;
   border: 1px solid #000000;
   border-radius: 5px;
   background-color: #FFFFFF;
-  font-size: 16px;
 }
 .main__load-article-button:hover {
   border: 1px solid #808080;
@@ -452,4 +467,70 @@ a:active {
 .main__load-article-button:active {
   border: 1px solid #A0A0A0;
   color: #808080;
+}
+
+
+
+
+
+/* профиль */
+.main__profile {
+  margin-top: 20px;
+  width: 300px;
+  padding: 0 20px;
+}
+.profile {
+  
+}
+.profile__title {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+.profile__data {
+  margin-bottom: 50px;
+}
+.profile__text {
+  margin-bottom: 10px;
+}
+.profile__input {
+  display: block;
+  height: 30px;
+  min-width: 100%;
+  padding-left: 10px;
+  border: 1px solid #808080;
+  border-radius: 5px;
+}
+.profile__first-name {
+  margin-bottom: 20px;
+}
+.profile__first-name-text {
+}
+.profile__first-name-input {
+}
+.profile__second-name {
+  margin-bottom: 20px;
+}
+.profile__second-name-text {
+}
+.profile__second-name-input {
+}
+.profile__email {
+}
+.profile__email-text {
+}
+.profile__email-input {
+}
+.profile__button {
+  height: 30px;
+  width: 200px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  background-color: #FFFFFF;
+}
+.profile__button:hover {
+  border: 1px solid #808080;
+}
+.profile__button:active {
+  color: #808080;
+  border: 1px solid #A0A0A0;
 }

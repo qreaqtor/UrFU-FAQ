@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Главная страница</title>
+    <title>practika</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;800&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -16,15 +16,17 @@
     <header class="header">
       <div class="wrapper">
         <div class="header__container">
-          <div class="header__logo"><p>Практика</p></div>
-          <div class="header__search">
-            <input type="text" name="header-search" placeholder="поиск...">
-          </div>
-          <nav class="header__menu">
-            <div class="header__menu-item header__menu-item-active"><a class="header__menu-item-link" href="/">статьи</a></div>
-            <div class="header__menu-item"><a class="header__menu-item-link" href="/write">создать</a></div>
-            <div class="header__menu-item"><a class="header__menu-item-link" href="/profile">профиль</a></div>
-          </nav>
+          <!-- <div class="header__menu">
+            <div class="header__logo"><p>Практика</p></div>
+            <div class="header__search">
+              <input type="text" name="header-search" placeholder="поиск...">
+            </div>
+            <nav class="header__menu">
+              <div class="header__menu-item header__menu-item-active"><a class="header__menu-item-link" href="#">статьи</a></div>
+              <div class="header__menu-item"><a class="header__menu-item-link" href="#">создать</a></div>
+              <div class="header__menu-item"><a class="header__menu-item-link" href="#">профиль</a></div>
+            </nav>
+          </div> -->
         </div>
       </div>
     </header>
@@ -32,23 +34,22 @@
 
 
     <main class="main">
-      <div class="wrapper">
-        <div class="main__continer">
+      <div class="main__wrapper wrapper">
+        <!-- <div class="main__continer"> -->
           <!-- список тем -->
-          <ul class="main__themes">
+          <!-- <ul class="main__themes">
             <li class="main__themes-item main__themes-item-active"><a class="main__themes-item-link" href="#">брс</a></li>
             <li class="main__themes-item"><a class="main__themes-item-link" href="#">модеус</a></li>
             <li class="main__themes-item"><a class="main__themes-item-link" href="#">онлайн курсы</a></li>
             <li class="main__themes-item"><a class="main__themes-item-link" href="#">преподаватели</a></li>
             <li class="main__themes-item"><a class="main__themes-item-link" href="#">другое</a></li>
-          </ul>
+          </ul> -->
 
 
 
           <!-- список статей -->
-          <div class="main__articles">
-            <!-- статья -->
-            <div class="main__article article">
+          <!-- <ul class="main__articles">
+            <li class="main__article article">
               <div class="article__name">
                 <p class="aticle__name-text">Как узнать свои оценки в брс</p>
               </div>
@@ -56,9 +57,9 @@
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis assumenda suscipit eveniet error dolore? Eius neque dolore officiis, explicabo quam sed, porro, enim minus necessitatibus obcaecati sequi perferendis aut accusamus.
               </div>
               <div class="article__date">03.07.2023</div>
-            </div>
+            </li>
 
-            <div class="main__article article">
+            <li class="main__article article">
               <div class="article__name">
                 <p class="aticle__name-text">Как узнать свои оценки в брс</p>
               </div>
@@ -66,9 +67,9 @@
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis assumenda suscipit eveniet error dolore? Eius neque dolore officiis, explicabo quam sed, porro, enim minus necessitatibus obcaecati sequi perferendis aut accusamus.
               </div>
               <div class="article__date">03.07.2023</div>
-            </div>
+            </li>
 
-            <div class="main__article article">
+            <li class="main__article article">
               <div class="article__name">
                 <p class="aticle__name-text">Как узнать свои оценки в брс</p>
               </div>
@@ -76,15 +77,100 @@
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis assumenda suscipit eveniet error dolore? Eius neque dolore officiis, explicabo quam sed, porro, enim minus necessitatibus obcaecati sequi perferendis aut accusamus.
               </div>
               <div class="article__date">03.07.2023</div>
+            </li>
+          </ul>
+        </div> -->
+
+
+
+        <!-- регистрация -->
+        <!-- <div class="main__sign-up sign-up">
+          <div class="sign-up__title">Регистрация</div>
+          <div class="sign-up__first-name sign-up__input-block">
+            <p class="sign-up__first-name-text sign-up__text">Имя</p>
+            <input class="sign-up__first-name-input sign-up__input" type="text" name="sign-up__first-name-input" placeholder="введите ваше имя...">
+          </div>
+          <div class="sign-up__second-name sign-up__input-block">
+            <p class="sign-up__second-name-text sign-up__text">Фамилия</p>
+            <input class="sign-up__second-name-input sign-up__input" type="text" name="sign-up__second-name-input" placeholder="введите вашу фамилию...">
+          </div>
+          <div class="sign-up__email sign-up__input-block">
+            <p class="sign-up__email-text sign-up__text">Электронная почта</p>
+            <input class="sign-up__email-input sign-up__input" type="email" name="sign-up__email-input" placeholder="введите вашу почту...">
+          </div>
+          <div class="sign-up__password sign-up__input-block">
+            <p class="sign-up__password-text sign-up__text">Пароль</p>
+            <input class="sign-up__password-input sign-up__input" type="password" name="sign-up__password-input" placeholder="введите пароль...">
+            <input class="sign-up__password-input sign-up__password-input_confirmation sign-up__input" type="password" name="sign-up__password-input_confirmation" placeholder="подтвердите пароль...">
+          </div>
+
+          <button class="sign-up__button" type="submit" name="sign-up__button">Создать аккаунт</button>
+          <div class="sign-up__hint">
+            <div class="sign-up__hint-text">уже есть аккаунт?</div>
+            <div class="sign-up__hint-link"><a href="#">нажми сюда</a></div>
+          </div>
+        </div> -->
+
+
+        
+        <!-- вход -->
+        <!-- <div class="main__login login">
+          <div class="login__title">Вход</div>
+          <div class="login__email login__input-block">
+            <p class="login__email-text login__text">Электронная почта</p>
+            <input class="login__email-input login__input" type="email" name="login__email-input" placeholder="введите вашу почту...">
+          </div>
+          <div class="login__password login__input-block">
+            <p class="login__password-text login__text">Пароль</p>
+            <input class="login__password-input login__input" type="password" name="login__password-input" placeholder="введите пароль...">
+          </div>
+
+          <button class="login__button" type="submit" name="login__button">Войти</button>
+          <div class="login__hint">
+            <div class="login__hint-text">нет аккаунта?</div>
+            <div class="login__hint-link"><a href="#">нажми сюда</a></div>
+          </div>
+        </div> -->
+
+
+
+        <!-- загрузить статью -->
+        <!-- <div class="main__load-article-container">
+          <div class="main__load-article load-article">
+            <div class="load-arctile__name">
+              <input class="load-article__name-input" type="text" name="load-article__name-input" placeholder="введите название статьи...">
+            </div>
+            <div class="load-article__text">
+              <textarea class="load-article__textarea" name="load-article__textarea" placeholder="введите содержание статьи"></textarea>
             </div>
           </div>
-        </div>
-        
+          <button class="main__load-article-button" type="submit" name="main__load-article-button">Загрузить</button>  
+        </div> -->
         
 
+
+        <!-- профиль -->
+        <!-- <div class="main__profile profile">
+          <p class="profile__title">Личные данные</p>
+          <div class="profile__data">
+            <div class="profile__first-name">
+              <p class="profile__first-name-text profile__text">Имя</p>
+              <input class="profile__first-name-input profile__input" type="text" name="profile__first-name-input" placeholder="введите ваше имя..." value="Иван">
+            </div>
+            <div class="profile__second-name">
+              <p class="profile__second-name-text profile__text">Фамилия</p>
+              <input class="profile__second-name-input profile__input" type="text" name="profile__second-name-input" placeholder="введите вашу фамилию..." value="Иванов">
+            </div>
+            <div class="profile__email">
+              <p class="profile__email-text profile__text">Электронная почта</p>
+              <input class="profile__email-inpu profile__input" type="email" name="profile__email-input" placeholder="введите вашу почту..." value="ivan.ivanov@gmail.com">
+            </div>
+          </div>
+          <button class="profile__button" type="submit">Сохранить</button>
+        </div> -->
       </div>
     </main>
   </body>
 
-  <script src="js/main.js"></script>
+  <script type="module" src="../static/js/main.js"></script>
 </html>
