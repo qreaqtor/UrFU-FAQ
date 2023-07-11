@@ -11,13 +11,17 @@ const createAnswersTeamplate = (answers) => {
   return result;
 };
 
+const getNormalDate = (date) => { 
+  return date.split('T')[0].split('-').reverse().join('.'); 
+} // Ещё часовой пояс надо учитывать
+
 const createTemplate = (question) => (
  `<li class="main__article article">
     <div class="article__name">
       <p class="aticle__name-text">${question.question}</p>
     </div>
 
-    <div class="article__date">${question.date_created}</div>
+    <div class="article__date">${getNormalDate(question.date_created)}</div>
   </li>`
 );
 
