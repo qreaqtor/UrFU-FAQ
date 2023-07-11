@@ -77,5 +77,17 @@ async def get_search_result(text: str):
         questions_result.append(QuestionOut(**question, id=question['_id']))
     return questions_result
 
+async def get_all_answers_from_bd():
+    result = []
+    async for answer in answers.find():
+        result.append(AnswerOut(**answer, id=answer['_id']))
+    return result
+
+async def get_all_questions_from_bd():
+    result = []
+    async for question in questions.find():
+        result.append(QuestionOut(**question, id=question['_id']))
+    return result
+
 async def get_user_db():
     yield BeanieUserDatabase(User)

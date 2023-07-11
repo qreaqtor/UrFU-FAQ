@@ -16,7 +16,7 @@ const createTemplate = (question) => (
     <div class="article__name">
       <p class="aticle__name-text">${question.question}</p>
     </div>
-    ${createAnswersTeamplate(question.answers)}
+
     <div class="article__date">${question.date_created}</div>
   </li>`
 );

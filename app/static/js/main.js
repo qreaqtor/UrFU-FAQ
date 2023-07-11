@@ -19,8 +19,12 @@ async function initialize() {
     const themesResponse = await getApiThemes();
     const themes = JSON.parse(themesResponse);
 
-    const questions = getQuestions();
-    const answers = getAnswers();
+    const questionsResponce = await getApiQuestions();
+    const questions = JSON.parse(questionsResponce);
+
+    //const answersResponce = await getApiAnswers();
+    //const answers = JSON.parse(answersResponce);
+    const answers = [];
 
     themeModel.init(themes, questions, answers);
     boardPresenter.init(themeModel);

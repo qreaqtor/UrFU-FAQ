@@ -99,7 +99,7 @@ async def get_all_questions_without_answer():
     return await get_questions_without_answer()
 
 ### Возвращает список всех ответов, которые являются ответом на вопрос question_id
-@app.get("/all_answers/{question_id}", response_model=List[AnswerOut])
+@app.get("/all_answers_by_question_id/{question_id}", response_model=List[AnswerOut])
 async def get_all_answers_by_question_id(question_id: str):
     return await get_answers_by_question_id(question_id)
 
@@ -123,3 +123,11 @@ async def modify_response(request, call_next):
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/all_answers", response_model=List[AnswerOut])
+async def get_all_answers():
+    return await get_all_answers_from_bd()
+
+@app.get("/all_questions", response_model=List[QuestionOut])
+async def get_all_questions():
+    return await get_all_questions_from_bd()
