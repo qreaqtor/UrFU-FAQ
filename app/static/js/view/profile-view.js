@@ -7,11 +7,11 @@ const createTemplate = (profile) => (
       <div class="profile__data">
         <div class="profile__first-name">
           <p class="profile__first-name-text profile__text">Имя</p>
-          <input class="profile__first-name-input profile__input" type="text" name="profile__first-name-input" placeholder="введите ваше имя..." value="${profile.firstName}">
+          <input class="profile__first-name-input profile__input" type="text" name="profile__first-name-input" placeholder="введите ваше имя..." value="${profile.name}">
         </div>
         <div class="profile__second-name">
           <p class="profile__second-name-text profile__text">Фамилия</p>
-          <input class="profile__second-name-input profile__input" type="text" name="profile__second-name-input" placeholder="введите вашу фамилию..." value="${profile.secondName}">
+          <input class="profile__second-name-input profile__input" type="text" name="profile__second-name-input" placeholder="введите вашу фамилию..." value="${profile.surname}">
         </div>
         <div class="profile__email">
           <p class="profile__email-text profile__text">Электронная почта</p>
@@ -24,11 +24,12 @@ const createTemplate = (profile) => (
 
 
 export default class ArticleView {
-  constructor(profile) {
-    this.profile = profile
+  init() {
+    
   }
 
   getTemplate () {
+    this.profile = this.getProfileDate();
     return createTemplate(this.profile);
   }
 
@@ -38,6 +39,24 @@ export default class ArticleView {
     }
 
     return this.element;
+  }
+
+  // запрос на проверку авторизации пользователя
+  getAuthorizationCode = () => {
+    return 200;
+  }
+
+  // получение данных пользователя
+  getProfileDate = () => {
+    return {
+      name: "Иван",
+      surname: "Иванов",
+      email: "ivan.ivanov@gmail.com",
+      hashed_password: "123",
+      is_active: true,
+      is_superuser: false,
+      is_verified: false
+    }
   }
 
   removeElement() {
