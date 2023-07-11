@@ -72,8 +72,8 @@ export default class BoardPresenter {
   switchTheme = (themeId) => {
     return () => {
       this.articlesList.removeArticles();
-      const theme = this.themes.filter(x => x.id == themeId)[0];
-      for (const question of theme.questions) {
+      const theme = this.themes[themeId-1]["id"]
+      for (const question of this.themesModel.questions.filter(x => x.topic_id == theme)) {
         render(new ArticleView(question), this.articlesList.getElement());
       }
     }

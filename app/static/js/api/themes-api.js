@@ -14,13 +14,29 @@ const getApiThemes = () => {
   
   const getApiQuestions = () => {
     return new Promise((resolve, reject) => {
-      // Ваш код для выполнения GET-запроса getApiQuestions()
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '/all_questions/');
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            const response = xhr.responseText;
+            resolve(response);
+          }
+        };
+        xhr.send();
     });
   };
   
   const getApiAnswers = () => {
     return new Promise((resolve, reject) => {
-      // Ваш код для выполнения GET-запроса getApiAnswers()
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '/all_answers/');
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            const response = xhr.responseText;
+            resolve(response);
+          }
+        };
+        xhr.send();
     });
   };
   
