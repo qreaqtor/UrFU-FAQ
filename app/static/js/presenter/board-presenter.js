@@ -59,12 +59,21 @@ export default class BoardPresenter {
       this.mainWrapper.innerHTML = '';
 
       // логика запроса
-      if (this.profile.getAuthorizationCode()) {
-        render(this.profile, this.mainWrapper);
-      } else {
-        render(this.signUp, this.mainWrapper);
-      }
-
+      fetch('/users/me')
+        .then(response => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            throw new Error('Ошибка при выполнении запроса');
+          }
+        })
+        .then(data => {
+          render(this.profile, this.mainWrapper);
+        })
+        .catch(error => {
+          render(this.signUp, this.mainWrapper);
+          console.error(error);
+        });
     }
   }
 
