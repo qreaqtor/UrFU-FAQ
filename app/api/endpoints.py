@@ -44,14 +44,14 @@ async def on_startup():
 
 
 ### Создаёт новый вопрос, если он прошел модерацию, иначе возвращает список не удовлетворяющих критериев
-@app.post("/new_question", response_model= Union[QuestionOut, List[str]])
+@app.post("/new_question", response_model= Union[QuestionOut, Criteria])
 async def create_question(question: QuestionIn, user = Depends(current_active_user)):
     # try:
     #     moderate_response = get_moderate_question(question.question)
     # except openai.error.RateLimitError as e:
     #     raise HTTPException(status_code=429, detail=str(e))
     # if moderate_response:
-    #     return moderate_response
+    #     return Criteria(criteria=moderate_response)
     # topics = [x.title for x in await get_topics()]
     # topic_title = get_moderate_topic(topics, question.question)
     # topic = await get_topic(Topic(title=topic_title))
@@ -59,7 +59,7 @@ async def create_question(question: QuestionIn, user = Depends(current_active_us
     return await insert_question(result)
 
 ### Создаёт новый ответ, если он прошел модерацию, иначе возвращает список не удовлетворяющих критериев
-@app.post("/new_answer", response_model= Union[AnswerOut, List[str]])
+@app.post("/new_answer", response_model= Union[AnswerOut, Criteria])
 async def create_answer(answer: AnswerIn, user = Depends(current_active_user)):
     question = await get_question_by_id(answer.question_id)
     try:
@@ -67,12 +67,12 @@ async def create_answer(answer: AnswerIn, user = Depends(current_active_user)):
     except openai.error.RateLimitError as e:
         raise HTTPException(status_code=429, detail=str(e))
     if moderate_response:
-        return moderate_response
+        return Criteria(criteria=moderate_response)
     result = Answer(**answer.dict(), user_id=user.id)
     return await insert_answer(result)
 
 ### Создаёт новый вопрос и  ответ, если они прошли модерацию, иначе возвращает список не удовлетворяющих критериев
-@app.post("/new_question_answer/", response_model= Union[QuestionAndAnswerOut, List[str]])
+@app.post("/new_question_answer/", response_model= Union[QuestionAndAnswerOut, Criteria])
 async def create_question_and_answer(q_and_a: QuestionAndAnswerIn, user = Depends(current_active_user)):
     try:
         question_response = get_moderate_question(q_and_a.question)
@@ -80,7 +80,7 @@ async def create_question_and_answer(q_and_a: QuestionAndAnswerIn, user = Depend
     except openai.error.RateLimitError as e:
         raise HTTPException(status_code=429, detail=str(e))
     if question_response or answer_response:
-        return question_response + answer_response
+        return Criteria(criteria=question_response + answer_response)
     topics = [x.title for x in await get_topics()]
     topic_title = get_moderate_topic(topics, q_and_a.question)
     topic = await get_topic(Topic(title=topic_title))
