@@ -5,13 +5,13 @@ const createTemplate = () => (
    `<div class="main__load-article-container">
       <div class="main__load-article load-article">
         <div class="load-arctile__name">
-          <input class="load-article__name-input" type="text" name="load-article__name-input" placeholder="введите название статьи...">
+          <input class="load-article__name-input" type="text" name="load-article__name-input" placeholder="введите название вопроса...">
         </div>
         <div class="load-article__text">
-          <textarea class="load-article__textarea" name="load-article__textarea" placeholder="введите содержание статьи"></textarea>
+          <textarea class="load-article__textarea" name="load-article__textarea" placeholder="введите содержание вопроса"></textarea>
         </div>
       </div>
-      <button class="main__load-article-button" type="submit" name="main__load-article-button">Загрузить</button>  
+      <button class="main__load-article-button" type="submit" name="main__load-article-button">Опубликовать</button>  
     </div>`
   );
 

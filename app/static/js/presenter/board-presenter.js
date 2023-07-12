@@ -141,7 +141,7 @@ export default class BoardPresenter {
   }
 
   
-  // отрисовывает статьи на странице
+  // отрисовывает вопросы на странице
   setSearchQuestions() {
     return async () => {
       const questions = await this.getSearchQuestions();
