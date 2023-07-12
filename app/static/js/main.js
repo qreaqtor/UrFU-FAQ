@@ -22,9 +22,8 @@ async function initialize() {
     const questionsResponce = await getApiQuestions();
     const questions = JSON.parse(questionsResponce);
 
-    //const answersResponce = await getApiAnswers();
-    //const answers = JSON.parse(answersResponce);
-    const answers = [];
+    const answersResponce = await getApiAnswers();
+    const answers = JSON.parse(answersResponce);
 
     themeModel.init(themes, questions, answers);
     menu.init(boardPresenter.switchToOtherPage, boardPresenter.setSearchQuestions());
