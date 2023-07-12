@@ -67,6 +67,10 @@ class Topic(BaseModel):
     title: str
 
 
+class Criteria(BaseModel):
+    criteria: List[str]
+
+
 class User(BeanieBaseUser, Document):
     name: str
     surname: str
