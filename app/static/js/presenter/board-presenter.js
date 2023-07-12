@@ -110,32 +110,41 @@ export default class BoardPresenter {
   // гриша сказал что с сервера приходит список QuestionOut 
   // поэтому я постарался сразу под него все подстроить
   // и ответы на вопросы искать в this.themeModel.answers 
-  getSearchQuestions() {
-    const search = document.querySelector('.header__search input').value;
-
-    // тут нужно получить вопросы с сервера я пока заглушку поставил
-    let questions = this.themeModel.questions.filter(x => x.topic_id == 1); 
+  async getSearchQuestions() {
+    const search_data = document.querySelector('.header__search input').value;
+  
+    try {
+      const response = await fetch('/search/' + search_data);
     
-    // тут я только добавляю поле answers
-    questions = questions.map((x, i) => ({
-      id: x.id,
-      user_id: x.user_id,
-      topic_id: x.topic_id,
-      question: x.question,
-      date_created: x.date_created,
-      answers: Array.from({ length: this.themeModel.answers.length })
-        .map((y, j) => this.themeModel.answers[j])
-        .filter((y) => y.question_id == x.id)      
-    }));
-
-    return questions;
+      if (response.status === 200) {
+        const data = await response.json();
+        let questions = data;
+  
+        questions = questions.map((x, i) => ({
+          id: x.id,
+          user_id: x.user_id,
+          topic_id: x.topic_id,
+          question: x.question,
+          date_created: x.date_created,
+          answers: Array.from({ length: this.themeModel.answers.length })
+            .map((y, j) => this.themeModel.answers[j])
+            .filter((y) => y.question_id == x.id)      
+        }));
+  
+        return questions;
+      } else {
+        throw new Error('Ошибка при выполнении запроса');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   
   // отрисовывает статьи на странице
   setSearchQuestions() {
-    return () => {
-      const questions = this.getSearchQuestions()
+    return async () => {
+      const questions = await this.getSearchQuestions();
       this.switchToOtherPage(0);
       this.articlesList.removeArticles();
       for (const question of questions) {
