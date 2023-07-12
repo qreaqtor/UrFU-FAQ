@@ -54,9 +54,16 @@ export default class LoadArticleView {
     })
     .then(response => {
       if (response.ok) {
-        alert('Вы успешно создали вопрос!');
+        return response.json(); // Получить JSON-объект из ответа
       } else {
-        alert(response.status + ' ' + response.statusText);
+        throw new Error(response.status + ' ' + response.statusText);
+      }
+    })
+    .then(jsonData => {
+      if ('criteria' in jsonData) {
+        alert('Что-то пошло не так:\n' + jsonData)
+      } else {
+        alert('Успешно создан вопрос!')
       }
     })
     .catch(error => {
