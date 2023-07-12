@@ -27,8 +27,8 @@ async function initialize() {
     const answers = [];
 
     themeModel.init(themes, questions, answers);
+    menu.init(boardPresenter.switchToOtherPage, boardPresenter.setSearchQuestions());
     boardPresenter.init(themeModel);
-    menu.init(boardPresenter.switchToOtherPage);
 }
 
 initialize();

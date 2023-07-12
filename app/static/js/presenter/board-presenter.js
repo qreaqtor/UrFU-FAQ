@@ -22,9 +22,9 @@ export default class BoardPresenter {
     this.mainWrapper = document.querySelector('.main__wrapper');
   }
 
-  init (themesModel) {
-    this.themesModel = themesModel;
-    this.themes = this.themesModel.themesList;
+  init (themeModel) {
+    this.themeModel = themeModel;
+    this.themes = this.themeModel.themesList;
 
 
     render(this.mainContainer, this.mainWrapper)
@@ -88,12 +88,58 @@ export default class BoardPresenter {
   }
 
   
+  // исправил отображение ответов должно работать
+  // очень важно работать с this.themes так у него вложенная структура 
+  // в каждой теме массив questions соответвующей теме по id
+  // в каждом вопросе массив answers cоответвующей теме по id
+  // в this.themesModel.questions.filter(x => x.topic_id == theme) 
+  // были только вопросы а поля answer не было из-за чего у нас не получилось их отрисовать
   switchTheme = (themeId) => {
     return () => {
       this.articlesList.removeArticles();
-      const theme = this.themes[themeId-1]["id"] // получаем id темы (например: 64aacb66d3a0225df0c46c41)
-      for (const question of this.themesModel.questions.filter(x => x.topic_id == theme)) { // их всех вопросов мы проходимся только по вопросам, имеющие эту тему
-        render(new ArticleView(question), this.articlesList.getElement()); //либо тут, либо где то в процессе создания объекта ArticleView выдаёт оишбку
+      const themeTrueId = this.themes[themeId-1]["id"];
+      const theme = this.themes.filter(x => x.id == themeTrueId)[0];
+      for (const question of theme.questions) {
+        render(new ArticleView(question), this.articlesList.getElement());
+      }
+    }
+  }
+
+
+  // записать получение вопросов с сервера
+  // гриша сказал что с сервера приходит список QuestionOut 
+  // поэтому я постарался сразу под него все подстроить
+  // и ответы на вопросы искать в this.themeModel.answers 
+  getSearchQuestions() {
+    const search = document.querySelector('.header__search input').value;
+
+    // тут нужно получить вопросы с сервера я пока заглушку поставил
+    let questions = this.themeModel.questions.filter(x => x.topic_id == 1); 
+    
+    // тут я только добавляю поле answers
+    questions = questions.map((x, i) => ({
+      id: x.id,
+      user_id: x.user_id,
+      topic_id: x.topic_id,
+      question: x.question,
+      date_created: x.date_created,
+      answers: Array.from({ length: this.themeModel.answers.length })
+        .map((y, j) => this.themeModel.answers[j])
+        .filter((y) => y.question_id == x.id)      
+    }));
+
+    return questions;
+  }
+
+  
+  // отрисовывает статьи на странице
+  setSearchQuestions() {
+    return () => {
+      const questions = this.getSearchQuestions()
+      this.switchToOtherPage(0);
+      this.articlesList.removeArticles();
+      for (const question of questions) {
+        render(new ArticleView(question), this.articlesList.getElement());
       }
     }
   }

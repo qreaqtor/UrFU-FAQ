@@ -4,10 +4,10 @@ export default class ThemeModel {
     this.questions = questions;
     this.answers = answers;
     this.themesList = [];
-    this.getThemesList();
+    this.setThemesList();
   }
 
-  getThemesList() { // переделать получше, выглядит ужасно, но работает.....        
+  setThemesList() { // переделать получше, выглядит ужасно, но работает.....        
     for (let theme of this.themes) {
       this.themesList.push({
         id: theme.id,
@@ -27,9 +27,5 @@ export default class ThemeModel {
           }))
       });
     }
-  }
-
-  getThemes() {
-    return this.themes;
   }
 }

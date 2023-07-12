@@ -16,12 +16,12 @@ const createTemplate = () => (
 
 
 export default class MenuView {
-  init(callback) {
+  init(menuCallback, searchCallback) {
     this.getElement();
-    this.setListeners(callback);
-    this.element.querySelector('.header__search input').addEventListener('keydown', this.onSearch)
+    this.setListeners(menuCallback);
+    this.element.querySelector('.header__search input').addEventListener('keydown', this.onSearch(searchCallback))
   }
-
+  
   getTemplate() {
     return createTemplate;
   }
@@ -54,9 +54,11 @@ export default class MenuView {
   }
 
   // обработчик события на поиске при копке Enter
-  onSearch(event) {
-    if (event.code == "Enter") {
-
+  onSearch(callback) {
+    return (event) => {
+      if (event.code == "Enter") {
+        callback();
+      }
     }
   }
 
