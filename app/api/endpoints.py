@@ -72,7 +72,7 @@ async def create_answer(answer: AnswerIn, user = Depends(current_active_user)):
     return await insert_answer(result)
 
 ### Создаёт новый вопрос и  ответ, если они прошли модерацию, иначе возвращает список не удовлетворяющих критериев
-@app.post("/new_question_answer/", response_model= Union[QuestionAndAnswerOut, Criteria])
+@app.post("/new_question_answer", response_model= Union[QuestionAndAnswerOut, Criteria])
 async def create_question_and_answer(q_and_a: QuestionAndAnswerIn, user = Depends(current_active_user)):
     try:
         question_response = get_moderate_question(q_and_a.question)

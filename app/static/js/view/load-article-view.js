@@ -8,7 +8,7 @@ const createTemplate = () => (
           <input class="load-article__name-input" type="text" name="load-article__name-input" placeholder="введите название вопроса...">
         </div>
         <div class="load-article__text">
-          <textarea class="load-article__textarea" name="load-article__textarea" placeholder="введите содержание вопроса"></textarea>
+          <textarea class="load-article__textarea" name="load-article__textarea" placeholder="оставьте поле пустым, если у Вас нет ответа"></textarea>
         </div>
       </div>
       <button class="main__load-article-button" type="submit" name="main__load-article-button">Опубликовать</button>  
@@ -40,10 +40,17 @@ export default class LoadArticleView {
     const question = document.querySelector('.load-article__name-input').value;
     const answer = document.querySelector('.load-article__textarea').value;
 
-    const url = "/new_question";
+    let successMsg = "Успешно создан вопрос!"
+    let url = "/new_question";
     const data = {
       "question": question
     };
+
+    if(answer != "") {
+      successMsg = "Успешно создан вопрос и ответ!"
+      url = "/new_question_answer"
+      data.answer = answer
+    }
 
     fetch(url, {
       method: 'POST',
@@ -63,7 +70,7 @@ export default class LoadArticleView {
       if ('criteria' in jsonData) {
         alert('Что-то пошло не так:\n' + jsonData.criteria.join('\n'))
       } else {
-        alert('Успешно создан вопрос!')
+        alert(successMsg)
       }
     })
     .catch(error => {
