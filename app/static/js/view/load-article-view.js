@@ -61,7 +61,7 @@ export default class LoadArticleView {
     })
     .then(jsonData => {
       if ('criteria' in jsonData) {
-        alert('Что-то пошло не так:\n' + jsonData.criteria)
+        alert('Что-то пошло не так:\n' + jsonData.criteria.join('\n'))
       } else {
         alert('Успешно создан вопрос!')
       }
