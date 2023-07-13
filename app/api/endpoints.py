@@ -46,16 +46,16 @@ async def on_startup():
 ### Создаёт новый вопрос, если он прошел модерацию, иначе возвращает список не удовлетворяющих критериев
 @app.post("/new_question", response_model= Union[QuestionOut, Criteria])
 async def create_question(question: QuestionIn, user = Depends(current_active_user)):
-    # try:
-    #     moderate_response = get_moderate_question(question.question)
-    # except openai.error.RateLimitError as e:
-    #     raise HTTPException(status_code=429, detail=str(e))
-    # if moderate_response:
-    #     return Criteria(criteria=moderate_response)
-    # topics = [x.title for x in await get_topics()]
-    # topic_title = get_moderate_topic(topics, question.question)
-    # topic = await get_topic(Topic(title=topic_title))
-    result = Question(**question.dict(), user_id=user.id, topic_id='64aed211addfeaa772d60e2f') # пока не делаю обработку для топика, потому-что из-за модерации всегда ошибка 209
+    try:
+        moderate_response = get_moderate_question(question.question)
+    except openai.error.RateLimitError as e:
+        raise HTTPException(status_code=429, detail=str(e))
+    if moderate_response:
+        return Criteria(criteria=moderate_response)
+    topics = [x.title for x in await get_topics()]
+    topic_title = get_moderate_topic(topics, question.question)
+    topic = await get_topic(Topic(title=topic_title))
+    result = Question(**question.dict(), user_id=user.id, topic_id=topic.id)
     return await insert_question(result)
 
 ### Создаёт новый ответ, если он прошел модерацию, иначе возвращает список не удовлетворяющих критериев
