@@ -6,8 +6,15 @@ const createAnswersTeamplate = (answers) => {
     result += `
     <div class="article__text">
       ${answer.answer}
-    </div>`
+    </div>
+    <div class="article__text-underline"></div>`
   }
+  result += `
+  <div class="article__load-answer">
+    <textarea class="article__load-answer-textarea" name="article__load-answer-textarea" placeholder="добавить ответ на вопрос..."></textarea>
+  </div>
+  <button class="article__load-answer-button" type="submit" name="article__load-answer-button">Отправить</button>
+  `
   return result;
 };
 
@@ -32,7 +39,8 @@ export default class ArticleView {
   constructor(question) {
     this.question = question;
     this.getElement();
-    this.element.addEventListener('click', this.onArticle());
+    this.onArticleFunc = this.onArticle();
+    this.element.addEventListener('click', this.onArticleFunc);
     this.isAnswersRender = false;
   }
 
@@ -50,13 +58,22 @@ export default class ArticleView {
 
   onArticle() {
     return () => {
-      if (this.isAnswersRender) {
-        this.getElement().querySelector('.article__answers').innerHTML = '';
-      } else {
-        this.getElement().querySelector('.article__answers').innerHTML = createAnswersTeamplate(this.question.answers);
-      }
+      this.element.querySelector('.article__answers').innerHTML = createAnswersTeamplate(this.question.answers);
+      this.element.style.cursor = "auto";
+      this.element.removeEventListener('click', this.onArticleFunc);
 
-      this.isAnswersRender = !this.isAnswersRender;
+      this.element.querySelector('.article__load-answer-button').addEventListener('click', this.onLoadButton());
+    }
+  }
+
+  onLoadButton() {
+    return () => {
+      const textarea = this.element.querySelector('.article__load-answer-textarea');
+      textarea.value = '';
+
+      // добавить запрос на сервер 
+      // alert можно убрать
+      alert("Ответ отправлен");
     }
   }
 
